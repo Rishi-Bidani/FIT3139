@@ -11,6 +11,13 @@ def proportional_scaling(arr, max_val=1.0):
     return max_val * arr / total
 
 
+def get_stats(players, results):
+    stats = {player["name"]: 0 for player in players}
+    for player in results:
+        stats[player["name"]] += 1
+    return stats
+
+
 @dataclass
 class Player:
     Serve: float

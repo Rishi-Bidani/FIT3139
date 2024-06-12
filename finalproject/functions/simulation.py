@@ -1,4 +1,7 @@
 import numpy as np
+import matplotlib.pyplot as plt
+from functions.tournament import SingleEliminationTournament
+from functions.helper import get_stats
 
 states = ["Serve", "Return", "Rally", "Point Won by Server", "Point Won by Returner"]
 
@@ -80,3 +83,47 @@ def simulate_match(player1, player2, transition_matrices, best_of=3):
             break
 
     return player1["sets"], player2["sets"]
+
+
+def simulate_tournaments(players, best_of=3, num_tournaments=1000):
+    for i, player in enumerate(players):
+        player["name"] = f"Player {i + 1}"
+    stats = {player["name"]: 0 for player in players}
+    name_to_player = {player["name"]: player for player in players}
+
+    all_results = []
+    for _ in range(num_tournaments):
+        tournament = SingleEliminationTournament(players, best_of=3)
+        results = tournament.simulate()
+        # for player in results:
+        #     stats[player["name"]] += 1
+        # winner = results[0]
+        # stats[winner["name"]] += 1
+        all_results.append(results)
+
+    first_place = [result[0] for result in all_results]
+    second_place = [result[1] for result in all_results]
+    third_place = [result[2] for result in all_results]
+    fourth_place = [result[3] for result in all_results]
+
+    stats_first_place = get_stats(players, first_place)
+    stats_second_place = get_stats(players, second_place)
+    stats_third_place = get_stats(players, third_place)
+    stats_fourth_place = get_stats(players, fourth_place)
+
+    # histogram with 1st and 2nd place next to each other for each player
+
+    fig, ax = plt.subplots()
+    # increase figure size to show all player names
+    fig.set_size_inches(10, 5)
+    bar_width = 0.35
+    index = np.arange(len(players))
+    ax.bar(index, stats_first_place.values(), bar_width, label="1st Place")
+    ax.bar(index + bar_width, stats_second_place.values(), bar_width, label="2nd Place")
+    ax.set_xlabel("Players")
+    ax.set_ylabel("Number of Wins")
+    ax.set_title(f"Distribution of wins in {num_tournaments} tournaments")
+    ax.set_xticks(index + bar_width / 2)
+    ax.set_xticklabels(stats_first_place.keys())
+    ax.legend()
+    plt.show()
