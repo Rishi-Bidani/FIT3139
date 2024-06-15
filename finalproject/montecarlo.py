@@ -1,18 +1,22 @@
 import matplotlib.pyplot as plt
-from functions.helper import *
-from functions.simulation import *
-from functions.transitionmatrix import *
+
+# from helper import *
+# from simulation import *
+# from transitionmatrix import *
+import helper as h
+import simulation as simulation
+import transitionmatrix as markov
 
 
 # simulate a point many times
 def _monte_carlo_point(player1, player2, reps=1000):
     winner_player1_serving = {"player1": 0, "player2": 0}
     winner_player2_serving = {"player1": 0, "player2": 0}
-    transition_matrices = create_transition_matrices(player1, player2)
+    transition_matrices = markov.create_transition_matrices(player1, player2)
 
     for _ in range(reps):
-        winner1, _ = simulate_point(transition_matrices[0])
-        winner2, _ = simulate_point(transition_matrices[1])
+        winner1, _ = simulation.simulate_point(transition_matrices[0])
+        winner2, _ = simulation.simulate_point(transition_matrices[1])
 
         # winner 1 is when player 1 serves
         winner_player1_serving["player1"] += 1 if winner1 == 3 else 0
@@ -28,10 +32,10 @@ def _monte_carlo_point(player1, player2, reps=1000):
 def _monte_carlo_game(player1, player2, reps=1000):
     winner_player1 = {"player1": 0, "player2": 0}
     winner_player2 = {"player1": 0, "player2": 0}
-    transition_matrices = create_transition_matrices(player1, player2)
+    transition_matrices = markov.create_transition_matrices(player1, player2)
     for _ in range(reps):
-        winner1 = simulate_game(player1, player2, transition_matrices)
-        winner2 = simulate_game(player2, player1, transition_matrices)
+        winner1 = simulation.simulate_game(player1, player2, transition_matrices)
+        winner2 = simulation.simulate_game(player2, player1, transition_matrices)
 
         winner_player1["player1"] += 1 if winner1[0] > winner1[1] else 0
         winner_player1["player2"] += 1 if winner1[0] < winner1[1] else 0
@@ -45,10 +49,10 @@ def _monte_carlo_game(player1, player2, reps=1000):
 # simulate a game many times
 def _monte_carlo_set(player1, player2, reps=1000):
     winners = {"player1": 0, "player2": 0}
-    transition_matrices = create_transition_matrices(player1, player2)
+    transition_matrices = markov.create_transition_matrices(player1, player2)
 
     for _ in range(reps):
-        winner = simulate_set(player1, player2, transition_matrices)
+        winner = simulation.simulate_set(player1, player2, transition_matrices)
         winners["player1"] += 1 if winner[0] > winner[1] else 0
         winners["player2"] += 1 if winner[0] < winner[1] else 0
 
@@ -58,10 +62,12 @@ def _monte_carlo_set(player1, player2, reps=1000):
 # simulate a match many times
 def _monte_carlo_match(player1, player2, reps=1000, best_of=3):
     winners = {"player1": 0, "player2": 0}
-    transition_matrices = create_transition_matrices(player1, player2)
+    transition_matrices = markov.create_transition_matrices(player1, player2)
 
     for _ in range(reps):
-        winner = simulate_match(player1, player2, transition_matrices, best_of=best_of)
+        winner = simulation.simulate_match(
+            player1, player2, transition_matrices, best_of=best_of
+        )
         winners["player1"] += 1 if winner[0] > winner[1] else 0
         winners["player2"] += 1 if winner[0] < winner[1] else 0
 
@@ -69,7 +75,7 @@ def _monte_carlo_match(player1, player2, reps=1000, best_of=3):
 
 
 def plot_monte_carlo_simulation(
-    player1: Player, player2: Player, function, reps=1000
+    player1: h.Player, player2: h.Player, function, reps=1000
 ) -> None:
     winners = function(player1, player2, reps)
 

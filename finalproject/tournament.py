@@ -1,6 +1,6 @@
-from functions.helper import *
-from functions.simulation import *
-from functions.transitionmatrix import *
+import simulation as simulation
+import transitionmatrix as markov
+import helper as h
 
 
 class SingleEliminationTournament:
@@ -10,13 +10,13 @@ class SingleEliminationTournament:
         self.results = None
 
     def simulate_round(self, player1, player2):
-        transition_matrices = create_transition_matrices(player1, player2)
-        winner = simulate_match(
+        transition_matrices = markov.create_transition_matrices(player1, player2)
+        winner = simulation.simulate_match(
             player1, player2, transition_matrices, best_of=self.best_of
         )
         return player1 if winner[0] > winner[1] else player2
 
-    def simulate(self) -> list[Player]:
+    def simulate(self) -> list[h.Player]:
         """Simulates the tournament and returns the top 4 players.
         This is a simple single elimination tournament and only works with more than 4 players.
         I did not do error checking and handling of edge cases to keep the code and within the scope of the assignment.

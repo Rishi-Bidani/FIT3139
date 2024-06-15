@@ -1,7 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from functions.tournament import SingleEliminationTournament
-from functions.helper import get_stats
+
+# from tournament import SingleEliminationTournament
+# from helper import get_stats
+import tournament as t
+import helper as h
 
 states = ["Serve", "Return", "Rally", "Point Won by Server", "Point Won by Returner"]
 
@@ -93,7 +96,7 @@ def simulate_tournaments(players, best_of=3, num_tournaments=1000):
 
     all_results = []
     for _ in range(num_tournaments):
-        tournament = SingleEliminationTournament(players, best_of=3)
+        tournament = t.SingleEliminationTournament(players, best_of=3)
         results = tournament.simulate()
         # for player in results:
         #     stats[player["name"]] += 1
@@ -106,10 +109,10 @@ def simulate_tournaments(players, best_of=3, num_tournaments=1000):
     third_place = [result[2] for result in all_results]
     fourth_place = [result[3] for result in all_results]
 
-    stats_first_place = get_stats(players, first_place)
-    stats_second_place = get_stats(players, second_place)
-    stats_third_place = get_stats(players, third_place)
-    stats_fourth_place = get_stats(players, fourth_place)
+    stats_first_place = h.get_stats(players, first_place)
+    stats_second_place = h.get_stats(players, second_place)
+    stats_third_place = h.get_stats(players, third_place)
+    stats_fourth_place = h.get_stats(players, fourth_place)
 
     # histogram with 1st and 2nd place next to each other for each player
 

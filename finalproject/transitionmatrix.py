@@ -1,5 +1,5 @@
 import numpy as np
-from functions.helper import *
+import helper as h
 
 
 def create_transition_matrix(server_skill: int, returner_skill: int):
@@ -25,13 +25,13 @@ def create_transition_matrix(server_skill: int, returner_skill: int):
     # Transition matrix
     transition_matrix = np.array(
         [
-            proportional_scaling(
+            h.proportional_scaling(
                 [0.0, p_return_success, 0.0, p_serve_win_direct, p_serve_loss_direct]
             ),  # Serve
-            proportional_scaling(
+            h.proportional_scaling(
                 [0.0, 0.0, p_rally_continue, p_server_win, p_returner_win]
             ),  # Return
-            proportional_scaling(
+            h.proportional_scaling(
                 [0.0, 0.0, p_rally_continue, p_rally_server_win, p_rally_returner_win]
             ),  # Rally
             [0.0, 0.0, 0.0, 1.0, 0.0],  # Point Won by Server (Terminal)
@@ -42,7 +42,7 @@ def create_transition_matrix(server_skill: int, returner_skill: int):
     return transition_matrix
 
 
-def create_transition_matrices(player1: Player, player2: Player):
+def create_transition_matrices(player1: h.Player, player2: h.Player):
     # Transition matrix for player 1 serving
     transition_matrix_serve_p1 = create_transition_matrix(player1.Serve, player2.Return)
     # Transition matrix for player 2 serving
