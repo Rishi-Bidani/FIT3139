@@ -48,3 +48,14 @@ def create_transition_matrices(player1: Player, player2: Player):
     # Transition matrix for player 2 serving
     transition_matrix_serve_p2 = create_transition_matrix(player2.Serve, player1.Return)
     return transition_matrix_serve_p1, transition_matrix_serve_p2
+
+
+def show_absorbtion_probabilities(
+    server_skill_level: int, receiver_skill_level: int, steps: int = 100
+):
+    P = lambda M, n: np.linalg.matrix_power(M, n)
+    transition_matrix = create_transition_matrix(
+        server_skill_level, receiver_skill_level
+    )
+    with np.printoptions(precision=5, suppress=True):
+        print(P(transition_matrix, steps))
