@@ -69,7 +69,9 @@ def simulate_set(player1, player2, transition_matrices):
     return player1["games"], player2["games"]
 
 
-def simulate_match(player1, player2, transition_matrices, best_of=3):
+def simulate_match(
+    player1: h.Player, player2: h.Player, transition_matrices, best_of=3
+) -> tuple[h.Player.sets, h.Player.sets]:
     player1["sets"] = 0
     player2["sets"] = 0
     required_sets = (best_of + 1) // 2
