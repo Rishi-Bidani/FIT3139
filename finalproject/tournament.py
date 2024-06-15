@@ -26,7 +26,6 @@ class SingleEliminationTournament:
         """
         # make groups of 2
         brackets = [self.players[i : i + 2] for i in range(0, len(self.players), 2)]
-        print(len(brackets))
         while len(brackets) > 2:
             # there are more than 4 players remaining
             # simulate each bracket
@@ -35,7 +34,6 @@ class SingleEliminationTournament:
                 winner = self.simulate_round(bracket[0], bracket[1])
                 winners.append(winner)
             brackets = [winners[i : i + 2] for i in range(0, len(winners), 2)]
-            print(len(brackets))
 
         # there are 2 brackets remaining
         # simulate both of them and return the ranking of the players
