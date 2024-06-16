@@ -43,7 +43,7 @@ def _monte_carlo_game(player1, player2, reps=1000):
         winner_player2["player2"] += 1 if winner2[0] > winner2[1] else 0
         winner_player2["player1"] += 1 if winner2[0] < winner2[1] else 0
 
-    return "set", winner_player1, winner_player2
+    return "game", winner_player1, winner_player2
 
 
 # simulate a game many times
@@ -56,7 +56,7 @@ def _monte_carlo_set(player1, player2, reps=1000):
         winners["player1"] += 1 if winner[0] > winner[1] else 0
         winners["player2"] += 1 if winner[0] < winner[1] else 0
 
-    return "game", winners
+    return "set", winners
 
 
 # simulate a match many times
@@ -99,10 +99,9 @@ def plot_monte_carlo_simulation(
     elif len(winners) == 2:
         text, winners = winners
         fig, ax = plt.subplots()
-        fig.suptitle(f"Monte Carlo Simulation of a {text}")
+        ax.set_title(f"Monte Carlo Simulation of a {text}")
         ax.bar(winners.keys(), winners.values())
         ax.bar_label(ax.containers[0])
-        ax.set_title(text)
         ax.set_xlabel("Winner")
         ax.set_ylabel("Frequency")
         plt.show()
